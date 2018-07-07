@@ -8,9 +8,9 @@ TARGET := main
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name '*.$(SRCEXT)')
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-LIB := -L lib
-LNK := -l lnk
-INC := -I include
+LIB := -L ~/CPP_Library/SFML-2.5.0/lib
+LNK := -l sfml-graphics -l sfml-window -l sfml-system -l sfml-network -l sfml-audio
+INC := -I ~/CPP_Library/SFML-2.5.0/include
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
