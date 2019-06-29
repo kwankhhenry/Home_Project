@@ -1,58 +1,61 @@
 #include <iostream>
 #include <exception>
-#include <mysql++.h>
+#include "Database.h"
 
 using namespace std;
 using namespace mysqlpp;
 
 int main(int argc, char* argv[])
 {
-	const char *server = "192.168.1.126";
-	const char *user = "root";
-	const char *password = "admin";
-	const char *database = "TX";
-	const unsigned int port = 3306;
-	
-	Connection con(false);
+	Database myDB;
+	int DBresult;
+	DBresult = myDB.Connect("TX");
 
-	/* Connect to DB */
-	if (!con.connect(database, server, user, password, port))
+	if(DBresult)
 	{
-		cerr << "Error in connection!"  <<  endl;
-		return -1;
+		cout << "Failed to connect to DB." << endl;
+		return 0;
 	}
 
-	Query query = con.query();
-	query << "SELECT * FROM TB_TRADE_TABLE";
-	
-	StoreQueryResult res = query.store();
-
-	/* Send SQL query */
-	if (!res) {
-		cerr << "Failed to send query: "
-		     << query.error() << endl;
-		return -1;
-	}
-	else
+	while(1)
 	{
-	/* output table contents */
-		Row row;
-		Row::size_type i;
-		/*
-		for (i = 0; row = res.at(0); ++i)
-		{
-			cout << "Total number of rows: " << res[0]["ROWS_READ"];
+		int option;
+		cout << "\nPlease select one of the below options:\n";
+		cout << "1. List current DB\n";
+		cout << "2. Create a DB\n";
+		cout << "3. Delete a DB\n";
+		cout << "4. Display Data\n";
+		cout << "5. Exit\n";
+		cin >> option;
+
+		try { 
+			switch(option){
+				case 1: myDB.listDB();
+						break;
+				case 2: myDB.createDB();
+						break;
+				case 3: myDB.deleteDB();
+						break;
+				case 4: myDB.displayData();
+						break;
+				case 5: myDB.quit();
+						break;
+				default: cout << "Unknown input. Please enter again.\n";
+						 break;
+			}
 		}
-		*/
-		for (i = 0; i < res.num_rows(); i++)
-		{
-			cout 
-			<< "Trade_Key: " << res[i]["ID"] 
-			<< " - Name: " << res[i]["NAMES"] 
-			<< endl;
+		catch(BadQuery err) {
+			cerr << "Bad query: " << err.what() << endl;
+			return -1;
+		}
+		catch(const Exception& err) {
+			cerr << "Exception error: " << err.what() << endl;
+			return -1;
 		}
 	}
+	
+	//displayData(con);
 
 	/* close connection */
-	return 0;
+	return (EXIT_SUCCESS);
 }

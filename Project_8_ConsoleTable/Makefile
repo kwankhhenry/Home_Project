@@ -1,23 +1,23 @@
 #Parameters and Flags
 CC	:= g++
-CFLAGS := -Wall -fPIC#-std=c++11#-v #-g
+CFLAGS := -Wall -fPIC#-std=c++11#-g
 LFLAGS := -shared
 SRCDIR := src
 BUILDDIR := build
 LIBDIR := ../lib
-TARGET := Database
+TARGET := ConsoleTable
 
 SRCEXT := cpp
 SOURCES := $(shell find -type f -name '*.$(SRCEXT)')
 OBJECTS := $(patsubst ./%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-INC := -I/usr/include/mysql -I/usr/include/mysql++ -I/home/admin/Home_Project/Project_8_ConsoleTable
-LIB := -L/usr/lib -L/home/admin/Home_Project/lib
-LNK := -lmysqlpp -lmysqlclient -lConsoleTable
+INC := -I /usr/include
+LIB := -L /usr/lib
+LNK := -l 
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
-	@echo " $(CC) -o $(TARGET) $^ $(LIB) $(LNK)"; 
-		$(CC) -o $(TARGET) $^ $(LIB) $(LNK)
+	@echo " $(CC) -o $(TARGET) $^ $(LIB)"; 
+		$(CC) -o $(TARGET) $^ $(LIB)
 
 $(BUILDDIR)/%.o: ./%.$(SRCEXT)
 	@echo " Building..."
@@ -34,5 +34,6 @@ clean:
 	@echo " Cleaning...";
 	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; 
 		$(RM) -r $(BUILDDIR) $(TARGET)
-	@echo " $(RM) -r $(LIBDIR)/lib$(TARGET).so";
-		$(RM) -r $(LIBDIR)/lib$(TARGET).so
+	@echo " $(RM) -r $(LIBDIR)/lib$(TARGET).so"; 
+		$(RM) -r $(LIBDIR)/$(TARGET).so
+

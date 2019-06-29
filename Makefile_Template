@@ -1,16 +1,23 @@
 #Parameters and Flags
 CC	:= g++
-CFLAGS := -Wall#-g
+CFLAGS := -Wall -fPIC#-std=c++#-g
+LFLAGS := -shared
 SRCDIR := src
 BUILDDIR := build
+LIBDIR := ../lib
 TARGET := main
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name '*.$(SRCEXT)')
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+INC := -I include
 LIB := -L lib
 LNK := -l lnk
-INC := -I include
+
+# all: library.cpp main.cpp
+# $@ evaluates to "all"
+# $< evaluates to "library.cpp"
+# $^ evaluates to "library.cpp main.cpp"
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
@@ -23,7 +30,15 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo " $(CC) $(CFLAGS) $(INC) -o $@ -c $<"; 
 		$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 
+lib: $(OBJECTS)
+	@echo " Creating shared library..."
+	@echo " $(CC) $(LFLAGS) -o $(LIBDIR)/lib$(TARGET).so $^";
+		$(CC) $(LFLAGS) -o $(LIBDIR)/lib$(TARGET).so $^
+
 clean:
 	@echo " Cleaning...";
 	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; 
 		$(RM) -r $(BUILDDIR) $(TARGET)
+	@echo " $(RM) -r $(LIBDIR)/lib$(TARGET).so"; 
+		$(RM) -r $(LIBDIR)/$(TARGET).so
+
