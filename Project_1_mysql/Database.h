@@ -6,16 +6,17 @@
 class Database {
 	public:
 		Database();
-		int Connect(const char* targetDB);
-		void displayData();
+		int connectDB();
+		int connectDB(const char* targetDB);
 		void listDB();
 		void createDB();
 		void deleteDB();
 		void quit();
-
-	private:
+		void listTable();
+		mysqlpp::Connection getConnection();
 		mysqlpp::StoreQueryResult sendQuery(mysqlpp::Query query);
 
+	private:
 		mysqlpp::Connection con;
 		const char *server;
 		const char *user;

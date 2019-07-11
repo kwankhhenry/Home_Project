@@ -65,8 +65,8 @@ void ConsoleTable::printTable() {
         std::cout << style_line_vertical << std::endl;
         if (row == entries.size() - 1)
             printHorizontalSeperator(maxWidths, SEPERATOR_BOTTOM);
-        else
-            printHorizontalSeperator(maxWidths, SEPERATOR_MIDDLE);
+        //else
+        //    printHorizontalSeperator(maxWidths, SEPERATOR_MIDDLE);
     }
 }
 

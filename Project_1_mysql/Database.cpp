@@ -11,10 +11,29 @@ Database::Database()
 	server = "192.168.1.126";
 	user = "root";
 	password = "admin";
-	port = 3306;	
+	port = 3306;
+
+	if (!con.connect(0, server, user, password, port))
+	{
+		std::cerr << "Error in connection!"  <<  std::endl;
+	}
+	else
+	{
+		std::cout << "Connected to server " << server << " successfully." << std::endl;
+	}
 }
 
-int Database::Connect(const char* targetDB)
+int Database::connectDB()
+{
+	std::string connDB;
+
+	std::cout << "Please provide names of DB to connect: ";
+	std::cin >> connDB;
+
+	return connectDB(connDB.c_str());
+}
+
+int Database::connectDB(const char* targetDB)
 {
 	/* Connect to DB */
 	database = targetDB;
@@ -30,49 +49,6 @@ int Database::Connect(const char* targetDB)
 	}
 }
 
-StoreQueryResult Database::sendQuery(Query query)
-{
-	StoreQueryResult result = query.store();
-
-	/* Send SQL query */
-	if (!result) {
-		std::cerr << "Failed to send query: "
-		     	  << query.error() << std::endl;
-	}
-	return result;
-}
-
-void Database::displayData()
-{
-	Query myQuery = con.query();
-	myQuery << "SELECT * FROM TB_TRADE_TABLE";
-
-	StoreQueryResult res = sendQuery(myQuery);
-
-	if(res)
-	{
-		// output table contents
-		std::cout << "Total number of rows: " << res.num_rows() << std::endl;	
-		for (Row::size_type i = 0; i < res.fields().size(); i++)
-		{
-			std::cout << std::left << std::setw(22) << std::setfill('-') << std::left << '+' << std::left << '+' << std::endl;
-			std::cout << std::setfill(' ') << '|' << std::left << std::setw(21)
-					  << res.field_name(i)
-					  << std::setfill(' ') << '|' << std::endl;
-			std::cout << std::left << std::setw(22) << std::setfill('-') << std::left << '+' << std::left << '+' << std::endl;
-		}
-
-		StoreQueryResult::const_iterator it;
-		for(it = res.begin(); it != res.end(); ++it)
-		{
-			Row row = *it;
-			std::cout << std::setfill(' ') << "|" << std::left << std::setw(21) << row[0] 
-				 	  << std::setfill(' ') << "|" << std::endl;
-		}
-		std::cout << std::left << std::setw(22) << std::setfill('-') << std::left << '+' << std::left << '+' << std::endl;
-	}
-}
-
 void Database::listDB()
 {
 	std::cout << "Currently available DB:\n";
@@ -84,10 +60,10 @@ void Database::listDB()
 		// Printer Header
 		std::cout << "Records Found: " << res.size() << std::endl;
 
-		ConsoleTable outputTable(BASIC);
+		ConsoleTable outputDB(BASIC);
 		for(size_t i = 0; i < res.num_fields(); i++)
 		{
-			outputTable.addColumn(res.field_name(i));
+			outputDB.addColumn(res.field_name(i));
 		}
 
 		// Add row contents
@@ -97,11 +73,12 @@ void Database::listDB()
 			for(size_t j = 0; j < res.num_fields(); j++)
 			{
 				std::string field = res.field_name(j);
-				entry->addEntry(res[i][field.c_str()],j);
+				std::string field_content = static_cast<std::string>(res[i][field.c_str()]);
+				entry->addEntry(field_content,j);
 			}
+			outputDB.addRow(entry);
 		}
-		outputTable.addRow(entry);
-		outputTable.printTable();
+		outputDB.printTable();
 		/*
 		std::cout << std::left << std::setw(22) << std::setfill('-') << std::left << '+' << std::left << '+' << std::endl;
 		std::cout << std::setfill(' ') << '|' << std::left << std::setw(21)
@@ -131,7 +108,8 @@ void Database::createDB()
 	std::cin >> dbName;
 
 	Query myQuery = con.query();
-	myQuery << "CREATE DATABASE " << dbName;
+	myQuery << "CREATE DATABASE " << dbName << " "
+			<< "DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 	result = myQuery.execute();
 	if(result)
 	{
@@ -168,4 +146,54 @@ void Database::quit()
 {
 	con.disconnect();
 	exit(EXIT_SUCCESS);
+}
+
+void Database::listTable()
+{
+	std::cout << "Currently available table:\n";
+	Query myQuery = con.query();
+	myQuery << "show tables";
+	StoreQueryResult res = sendQuery(myQuery);
+	
+	if(res) {
+		// Printer Header
+		std::cout << "Records Found: " << res.size() << std::endl;
+
+		ConsoleTable outputTable(BASIC);
+		for(size_t i = 0; i < res.num_fields(); i++)
+		{
+			outputTable.addColumn(res.field_name(i));
+		}
+
+		// Add row contents
+		for(size_t i = 0; i < res.num_rows(); i++)
+		{
+			ConsoleTableRow* entry = new ConsoleTableRow(res.num_fields());
+			for(size_t j = 0; j < res.num_fields(); j++)
+			{
+				std::string field = res.field_name(j);
+				std::string field_content = static_cast<std::string>(res[i][field.c_str()]);
+				entry->addEntry(field_content,j);
+			}
+			outputTable.addRow(entry);
+		}
+		outputTable.printTable();
+	}
+}
+
+StoreQueryResult Database::sendQuery(Query query)
+{
+	StoreQueryResult result = query.store();
+
+	/* Send SQL query */
+	if (!result) {
+		std::cerr << "Failed to send query: "
+		     	  << query.error() << std::endl;
+	}
+	return result;
+}
+
+Connection Database::getConnection()
+{
+	return con;
 }

@@ -3,8 +3,8 @@
 
 #include <string>
 #include <vector>
-#include "ConsoleTableRow.h"
 #include <sstream>
+#include "ConsoleTableRow.h"
 
 enum Style {
 	BASIC,
