@@ -35,5 +35,4 @@ clean:
 	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; 
 		$(RM) -r $(BUILDDIR) $(TARGET)
 	@echo " $(RM) -r $(LIBDIR)/lib$(TARGET).so"; 
-		$(RM) -r $(LIBDIR)/$(TARGET).so
-
+		$(RM) -r $(LIBDIR)/lib$(TARGET).so
