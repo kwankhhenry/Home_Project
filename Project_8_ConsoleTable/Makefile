@@ -8,8 +8,8 @@ LIBDIR := ../lib
 TARGET := ConsoleTable
 
 SRCEXT := cpp
-SOURCES := $(shell find -type f -name '*.$(SRCEXT)')
-OBJECTS := $(patsubst ./%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+SOURCES := $(shell find $(SRCDIR) -type f -name '*.$(SRCEXT)')
+OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 INC := -I /usr/include
 LIB := -L /usr/lib
 LNK := -l 
@@ -19,7 +19,7 @@ $(TARGET): $(OBJECTS)
 	@echo " $(CC) -o $(TARGET) $^ $(LIB)"; 
 		$(CC) -o $(TARGET) $^ $(LIB)
 
-$(BUILDDIR)/%.o: ./%.$(SRCEXT)
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo " Building..."
 	@mkdir -p $(BUILDDIR)
 	@echo " $(CC) $(CFLAGS) $(INC) -o $@ -c $<"; 
