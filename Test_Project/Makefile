@@ -37,7 +37,6 @@ $(TARGET): $(OBJECTS)
 	@echo " $(CC) -o $@ $^ $(LIBRARY) $(LINKING)"; 
 	$(CC) -o $@ $^ $(LIBRARY) $(LINKING)
 else
-$(TARGET): $(OBJECTS)
 %: $(BUILDDIR)/%.o
 	@echo " Linking..."
 	@echo " $(CC) -o $@ $< $(LIBRARY) $(LINKING)"; 

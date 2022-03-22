@@ -1,6 +1,6 @@
 #Parameters and Flags
 CC	:= g++
-CFLAGS := -std=c++11 -Wall -g
+CFLAGS := -std=c++98 -Wall -g
 LFLAGS := -shared
 
 # Directory Paths
@@ -37,7 +37,6 @@ $(TARGET): $(OBJECTS)
 	@echo " $(CC) -o $@ $^ $(LIBRARY) $(LINKING)"; 
 	$(CC) -o $@ $^ $(LIBRARY) $(LINKING)
 else
-$(TARGET): $(OBJECTS)
 %: $(BUILDDIR)/%.o
 	@echo " Linking..."
 	@echo " $(CC) -o $@ $< $(LIBRARY) $(LINKING)"; 

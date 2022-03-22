@@ -10,24 +10,18 @@ using namespace std;
 
 int solution(vector<int> &A)
 {
-    set<int> tempSet(A.begin(), A.end());
-
-    int smallest = 1;
-    for(set<int>::iterator it = tempSet.begin(); it != tempSet.end(); ++it)
+    int east = 0;
+    unsigned long int intercept = 0;
+    for(vector<int>::iterator it = A.begin(); it != A.end(); ++it)
     {
-        //cout << "*it is: " << *it << endl;
-        if(*it > 0)
-        {
-            if(*it == smallest )
-            {
-                smallest++;
-                cout << "smallest is: " << smallest << endl;
-            }
-            else
-                return smallest;
-        }
+        if(*it == 0)
+            east++;
+        else if(*it == 1)
+            intercept = intercept + east;
     }
-    return smallest;
+    if (intercept > 1000000000) return -1;
+
+    return intercept;
 }
 
 int main()
@@ -35,7 +29,7 @@ int main()
     clock_t tStart = clock();
     /*************************************************************************/
 
-    int arr[] = {-1,3,1,3,2,6,4,1,2};
+    int arr[] = {0, 1, 0, 1, 1};
     vector<int> v(arr, arr+sizeof(arr)/sizeof(int));
     int result = solution(v);
 
