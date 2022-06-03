@@ -1,6 +1,6 @@
 #Parameters and Flags
 CC	:= g++
-CFLAGS := -std=c++11 -Wall -g
+CFLAGS := -std=c++11 -Wall -g #-fno-elide-constructors
 LFLAGS := -shared
 
 # Directory Paths
