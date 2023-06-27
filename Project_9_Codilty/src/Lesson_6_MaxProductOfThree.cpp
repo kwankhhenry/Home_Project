@@ -10,7 +10,7 @@ using namespace std;
 
 int solution(vector<int> &A)
 {
-
+	return 0;
 }
 
 int main()
