@@ -1,6 +1,6 @@
 #Parameters and Flags
 CC	:= g++
-CFLAGS := -std=c++11 -Wall -g
+CFLAGS := -std=c++14 -Wall -g
 LFLAGS := -shared
 
 # Directory Paths
