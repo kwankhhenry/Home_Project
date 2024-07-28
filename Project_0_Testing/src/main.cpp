@@ -1,44 +1,70 @@
 #include <iostream>
-#include <unordered_map>
+#include <vector>
+#include <stack>
+#include <set>
 
 using namespace std;
 
-int calculation(int arr[], int n, int k)
-{
-	unordered_map<int, int> myMap;
-	int sum = 0, count = 0;
+bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+	int N = static_cast<int>(prerequisites.size());
 
-	if(n == 0)
-		return 0;
-
-	for(int i = 0; i < n; i++)
+	vector<vector<int>> adj_list(numCourses, vector<int>(0));        
+	for(int i = 0; i < N; i++)
 	{
-		sum += (arr[i] - k);
-
-		if(sum == 0)
-			count++;
-
-		if(myMap.find(sum) != myMap.end())
-		{
-			myMap[sum]++;
-			count++;
-
-			//count +=myMap[sum];
-		}
-
-		myMap[sum]++;
+		adj_list[prerequisites[i][0]].push_back(prerequisites[i][1]);
 	}
-	return count;
+
+	vector<bool> visited(numCourses, false);
+    set<int> mySet;
+	stack<int> myStack;
+
+	for(int a = 0; a < numCourses; a++)
+	{
+		cout << a << ": [";
+		for(int b = 0; b < (int) adj_list[a].size(); b++)
+		{
+			cout << adj_list[a][b] << " ";
+		}
+		cout << "]\n";
+	}   
+
+	for(int j = 0; j < (int) adj_list.size(); j++)
+	{
+		if(visited[j] == false)
+			myStack.push(j);
+		else
+			return false;
+		
+		visited[j] = true;
+
+		while(!myStack.empty())
+		{
+			int curr = myStack.top();
+			myStack.pop();
+			mySet.emplace(curr);
+			
+			for(int& ele: adj_list[curr])
+			{
+				if(visited[ele] == true && mySet.contains(ele)) 
+					return false;
+				else
+				{
+					myStack.push(ele);
+				}
+			}
+			mySet.erase(curr);
+		}
+	}
+	return true;
 }
 
 int main() 
 {
-	int K = 4;
-	int arr[] = {1, 4, 2, 6, 10};
-	int N = sizeof(arr)/sizeof(arr[0]); 
-	int result = 0;
+	int numCourses = 2;
+	vector<vector<int>> prerequisites{{1,0},{0,1}};
+	bool result = 0;
 
-	result = calculation(arr, N, K);
+	result = canFinish(numCourses, prerequisites);
 	cout << "Result is: " << result << endl;
 	return 0;
 }
