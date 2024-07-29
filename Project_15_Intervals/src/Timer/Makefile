@@ -6,10 +6,10 @@ LFLAGS := -shared
 # Directory Paths
 SRCDIR := src
 BUILDDIR := build
-LIBDIR := ../lib
+LIBDIR := /home/admin/Home_Project/lib
 
 SRCEXT := cpp
-SOURCES := $(shell find $(SRCDIR) -maxdepth 1 -type f -name '*.$(SRCEXT)')
+SOURCES := $(shell find $(SRCDIR) -type f -name '*.$(SRCEXT)')
 OBJECTS := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
 
 # Evaluate Target output based on existance of main.cpp
@@ -20,16 +20,16 @@ else
 endif
 
 # Include and Linker options
-INCLUDE := -I src/Timer/src	# Specify custom include paths
-LIBRARY := -L ../lib	# Specify custom library paths
-LINKING := -l Timer		# Specify custom libraries to include (.so (dynamic) or .a (static)).  E.g. -l mine = libmine.so
+INCLUDE := -I include	# Specify custom include paths
+LIBRARY := -L lib		# Specify custom library paths
+LINKING := 		# Specify custom libraries to include (.so (dynamic) or .a (static)).  E.g. -l mine = libmine.so
 
 # all: library.cpp main.cpp
 # $@ evaluates all output objects "all"
 # $< evaluates the first upcoming file "library.cpp"
 # $^ evaluates all cpp files "library.cpp main.cpp"
 
-all: Timer $(TARGET)
+all: $(TARGET)
 
 ifeq ($(TARGET), main)
 $(TARGET): $(OBJECTS)
@@ -55,18 +55,9 @@ lib: $(OBJECTS)
 	@echo " $(CC) $(LFLAGS) -o $(LIBDIR)/lib$(TARGET).so $^";
 		$(CC) $(LFLAGS) -o $(LIBDIR)/lib$(TARGET).so $^
 
-clean: Timer_Clean
+clean:
 	@echo " Cleaning...";
 	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; 
 		$(RM) -r $(BUILDDIR) $(TARGET)
 	@echo " $(RM) -r $(LIBDIR)/lib$(TARGET).so"; 
 		$(RM) -r $(LIBDIR)/lib$(TARGET).so
-
-# Calling makefile of subdirectory Timer
-.PHONY: Timer
-
-Timer:
-	$(MAKE) lib -C src/Timer
-
-Timer_Clean:
-	$(MAKE) clean -C src/Timer
