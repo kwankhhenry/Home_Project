@@ -8,6 +8,10 @@ SRCDIR := src
 BUILDDIR := build
 LIBDIR := ../lib
 
+# Sub-directory Paths under src and alias. E.g. src/Timer/. & Timer
+SUBPATH := $(wildcard **/*/.)
+SUBDIR := $(patsubst $(SRCDIR)/%/,%,$(basename $(SUBPATH)))
+
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -maxdepth 1 -type f -name '*.$(SRCEXT)')
 OBJECTS := $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
@@ -29,44 +33,39 @@ LINKING := -l Timer		# Specify custom libraries to include (.so (dynamic) or .a 
 # $< evaluates the first upcoming file "library.cpp"
 # $^ evaluates all cpp files "library.cpp main.cpp"
 
-all: Timer $(TARGET)
+all: $(SUBDIR) $(TARGET)
 
 ifeq ($(TARGET), main)
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
-	@echo " $(CC) -o $@ $^ $(LIBRARY) $(LINKING)"; 
 	$(CC) -o $@ $^ $(LIBRARY) $(LINKING)
 else
 %: $(BUILDDIR)/%.o
 	@echo " Linking..."
-	@echo " $(CC) -o $@ $< $(LIBRARY) $(LINKING)"; 
 	$(CC) -o $@ $< $(LIBRARY) $(LINKING)
 endif
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo " Building..."
 	@mkdir -p $(BUILDDIR)
-	@echo " $(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)"; 
 		$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
+
+# Calling makefile of subdirectory Timer
+$(SUBDIR):
+	@$(MAKE) lib -C $(SUBPATH)
 
 lib: $(OBJECTS)
 	@echo " Creating shared library..."
 	@mkdir -p $(LIBDIR)
-	@echo " $(CC) $(LFLAGS) -o $(LIBDIR)/lib$(TARGET).so $^";
 		$(CC) $(LFLAGS) -o $(LIBDIR)/lib$(TARGET).so $^
 
-clean: Timer_Clean
+clean: $(SUBDIR)_clr
 	@echo " Cleaning...";
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; 
 		$(RM) -r $(BUILDDIR) $(TARGET)
-	@echo " $(RM) -r $(LIBDIR)/lib$(TARGET).so"; 
 		$(RM) -r $(LIBDIR)/lib$(TARGET).so
 
-# Calling makefile of subdirectory Timer
-.PHONY: Timer
+# Executing makefile of subdirectory with alias of subdirectory name. E.g. SUBPATH = src/Timer/ and SUBDIR = Timer
+$(SUBDIR)_clr:
+	@$(MAKE) clean -C $(SUBPATH)
 
-Timer:
-	$(MAKE) lib -C src/Timer
-
-Timer_Clean:
-	$(MAKE) clean -C src/Timer
+.PHONY: all $(SUBDIR)

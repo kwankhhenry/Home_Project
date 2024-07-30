@@ -1,6 +1,6 @@
 ## Linux ignored files and folders
 .:
-**/build/*.o
+**/build/*
 main
 lib/*
 external_lib/*

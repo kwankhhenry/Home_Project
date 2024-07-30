@@ -34,30 +34,24 @@ all: $(TARGET)
 ifeq ($(TARGET), main)
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
-	@echo " $(CC) -o $@ $^ $(LIBRARY) $(LINKING)"; 
 	$(CC) -o $@ $^ $(LIBRARY) $(LINKING)
 else
 %: $(BUILDDIR)/%.o
 	@echo " Linking..."
-	@echo " $(CC) -o $@ $< $(LIBRARY) $(LINKING)"; 
 	$(CC) -o $@ $< $(LIBRARY) $(LINKING)
 endif
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo " Building..."
 	@mkdir -p $(BUILDDIR)
-	@echo " $(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)"; 
 		$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
 
 lib: $(OBJECTS)
 	@echo " Creating shared library..."
 	@mkdir -p $(LIBDIR)
-	@echo " $(CC) $(LFLAGS) -o $(LIBDIR)/lib$(TARGET).so $^";
 		$(CC) $(LFLAGS) -o $(LIBDIR)/lib$(TARGET).so $^
 
 clean:
 	@echo " Cleaning...";
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; 
 		$(RM) -r $(BUILDDIR) $(TARGET)
-	@echo " $(RM) -r $(LIBDIR)/lib$(TARGET).so"; 
 		$(RM) -r $(LIBDIR)/lib$(TARGET).so
