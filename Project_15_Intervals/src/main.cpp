@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main() 
+int main(int argc, char **argv) 
 {
 	Timer t;
 	Intervals s0("[1,3)");
@@ -27,7 +27,7 @@ int main()
 	std::cout << "\n------- Sample Test Scenarios ---------\n";
 	std::cout << "*Note: Assume input interval blocks do not overlap each other. E.g. {[1,3),(2,5]} is an invalid input\n";
 	std::cout << "\n------- 1. Interval Additions ---------\n";	
-	std::cout << "Scenario 1: " << s0 << " + " << s2 << " = " << s0+s2 << std::setw(68) << "...Expected: {[1,3),(4,6)}" << std::endl;	
+	std::cout << "Scenario 1: " << s0 << " + " << s2 << " = " << s0+s2 << std::setw(68) << "...Expected: {[1,3),(4,6]}" << std::endl;	
 	std::cout << "Scenario 2: " << s1 << " + " << s2 << " = " << s1+s2 << std::setw(69) << "...Expected: (2,6]" << std::endl;
 	std::cout << "Scenario 3: " << s1 << " + " << s3 << " = " << s1+s3 << std::setw(60) << "...Expected: (1,5]" << std::endl;
 	std::cout << "Scenario 4: " << s3 << " + " << s4 << " = " << s3+s4 << std::setw(40) << "...Expected: {(1,2],[3,4),(4,6),(7,10)}" << std::endl;

@@ -9,7 +9,7 @@ BUILDDIR := build
 LIBDIR := ../lib
 
 # Sub-directory Paths under src and alias. E.g. src/Timer/. & Timer
-SUBPATH := $(wildcard **/*/.)
+SUBPATH := $(wildcard **/Timer/.)
 SUBDIR := $(patsubst $(SRCDIR)/%/,%,$(basename $(SUBPATH)))
 
 SRCEXT := cpp
@@ -25,8 +25,8 @@ endif
 
 # Include and Linker options
 INCLUDE := -I src/Timer/src	# Specify custom include paths
-LIBRARY := -L ../lib	# Specify custom library paths
-LINKING := -l Timer		# Specify custom libraries to include (.so (dynamic) or .a (static)).  E.g. -l mine = libmine.so
+LIBRARY := -L ../lib # Specify custom library paths
+LINKING := -l Timer	# Specify custom libraries to include (.so (dynamic) or .a (static)).  E.g. -l mine = libmine.so
 
 # all: library.cpp main.cpp
 # $@ evaluates all output objects "all"

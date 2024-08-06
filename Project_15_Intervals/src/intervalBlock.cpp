@@ -229,19 +229,19 @@ void IntervalBlock::printBlockRange()
     switch(coverage)
     {
         case 81:
-            std::cout << "(" << m_LowerBound << ", " << m_UpperBound << ")";
+            std::cout << "(" << m_LowerBound << "," << m_UpperBound << ")";
             break;
         case 132:
-            std::cout << "[" << m_LowerBound << ", " << m_UpperBound << ")";
+            std::cout << "[" << m_LowerBound << "," << m_UpperBound << ")";
             break;
         case 133:
-            std::cout << "(" << m_LowerBound << ", " << m_UpperBound << "]";
+            std::cout << "(" << m_LowerBound << "," << m_UpperBound << "]";
             break;
         case 184:
-            std::cout << "[" << m_LowerBound << ", " << m_UpperBound << "]";
+            std::cout << "[" << m_LowerBound << "," << m_UpperBound << "]";
             break;
         default:
-            std::cout << "(" << m_LowerBound << ", " << m_UpperBound << ")";
+            std::cout << "(" << m_LowerBound << "," << m_UpperBound << ")";
             break;
     }
 }
@@ -254,19 +254,19 @@ std::ostream& operator<<(std::ostream& os, const IntervalBlock& output)
     switch(coverage)
     {
         case 81:
-            os << "(" << output.m_LowerBound << ", " << output.m_UpperBound << ")";
+            os << "(" << output.m_LowerBound << "," << output.m_UpperBound << ")";
             break;
         case 132:
-            os << "[" << output.m_LowerBound << ", " << output.m_UpperBound << ")";
+            os << "[" << output.m_LowerBound << "," << output.m_UpperBound << ")";
             break;
         case 133:
-            os << "(" << output.m_LowerBound << ", " << output.m_UpperBound << "]";
+            os << "(" << output.m_LowerBound << "," << output.m_UpperBound << "]";
             break;
         case 184:
-            os << "[" << output.m_LowerBound << ", " << output.m_UpperBound << "]";
+            os << "[" << output.m_LowerBound << "," << output.m_UpperBound << "]";
             break;
         default:
-            os << "(" << output.m_LowerBound << ", " << output.m_UpperBound << ")";
+            os << "(" << output.m_LowerBound << "," << output.m_UpperBound << ")";
             break;
     }
     return os;
