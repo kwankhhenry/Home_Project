@@ -8,7 +8,7 @@ project(test VERSION 1.0.0)
 
 #find_package(GTest CONFIG REQUIRED)
 #add_subdirectory(/home/admin/Home_Project/external_lib/googletest)
-include(/home/admin/Home_Project/external_lib/googletest/build/googletest/CTestTestfile.cmake)
+include(/home/admin/External_lib/googletest/build/googletest/CTestTestfile.cmake)
 #include(/home/admin/Home_Project/external_lib/googletest/build/CTestTestfile.cmake)
 #include(/home/admin/Home_Project/external_lib/googletest/build/googletest/generated/GTestConfig.cmake)
 
@@ -24,7 +24,7 @@ file(GLOB all_SRCS
 add_executable(${PROJECT_NAME}
                 ${all_SRCS})
 
-target_include_directories(test PRIVATE ${PROJECT_INTERVAL_SOURCE_DIR}/src/ /home/admin/Home_Project/external_lib/googletest/googletest/include)
-target_link_directories(test PRIVATE /home/admin/Home_Project/external_lib/googletest/build/lib)
+target_include_directories(test PRIVATE ${PROJECT_INTERVAL_SOURCE_DIR}/src/ /home/admin/External_lib/googletest/googletest/include)
+target_link_directories(test PRIVATE /home/admin/External_lib/googletest/build/lib)
 target_link_libraries(test PRIVATE gtest gtest_main pthread)
 #install(TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_SOURCE_DIR}/build/)
