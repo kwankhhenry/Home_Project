@@ -33,21 +33,21 @@ target_include_directories(${LIB_NAME}
         INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
                 $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
+# Install header to designated location
+install(FILES src/Logging.h DESTINATION ${INTERNAL_LIB_DIR}/include)
+
 # Set path configs to be EXPORT as target .cmake file and used by package manager to determine paths
 install(TARGETS ${LIB_NAME} 
-    EXPORT ${LIB_NAME}_Targets  # Export ${LIB_NAME}_Targets to be used to generate CMake config
+    EXPORT ${LIB_NAME}Targets  # Export ${LIB_NAME}_Targets to be used to generate CMake config
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} #${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${INTERNAL_LIB_DIR}/lib #${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} #${INTERNAL_LIB_DIR}/bin
     INCLUDES DESTINATION ${INTERNAL_LIB_DIR}/include #${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Install header to designated location
-install(FILES src/Logging.h DESTINATION ${INTERNAL_LIB_DIR}/include)
-
 # Generate CMake target files with above EXPORT 
-install(EXPORT ${LIB_NAME}_Targets
-        FILE ${LIB_NAME}_Targets.cmake  # CMake Target files details (lib path, include path, bin path, etc.)
+install(EXPORT ${LIB_NAME}Targets
+        FILE ${LIB_NAME}Targets.cmake  # CMake Target files details (lib path, include path, bin path, etc.)
         DESTINATION ${INTERNAL_LIB_DIR}/lib/cmake/${LIB_NAME}
         NAMESPACE MyLib::
 )
@@ -61,7 +61,6 @@ configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
         INSTALL_DESTINATION ${INTERNAL_LIB_DIR}/lib/cmake/${LIB_NAME}
 )
 
-install(FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}Config.cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}Config.cmake
         DESTINATION ${INTERNAL_LIB_DIR}/lib/cmake/${LIB_NAME}
 )
