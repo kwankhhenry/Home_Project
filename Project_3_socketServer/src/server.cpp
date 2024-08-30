@@ -17,8 +17,7 @@ int main()
 	int bufsize = 1024;
 	char send_data[bufsize], recv_data[bufsize];
 
-	struct sockaddr_in server_addr, client_addr;
-	socklen_t size;
+	struct sockaddr_in server_addr;
 
 	// init socket
 	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -32,11 +31,11 @@ int main()
 		cout << "Server Socket connection created..." << endl;
 
 	server_addr.sin_family = AF_INET;
-	server_addr.sin_addr.s_addr = htons(INADDR_ANY);
+	server_addr.sin_addr.s_addr = htons(INADDR_ANY); //inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr);
 	server_addr.sin_port = htons(portNum);
 
 	// binding socket
-	if(bind(sock, (struct sockaddr*)&server_addr, sizeof(struct sockaddr)) < 0)
+	if(bind(sock, (struct sockaddr*)& server_addr, sizeof(struct sockaddr)) < 0)
 	{
 		close(sock);
 		cout << "Error binding socket..." << endl;
@@ -46,10 +45,15 @@ int main()
 		cout << "Waiting for clients to connect..." << endl;
 
 	// listening socket
-	listen(sock, 1);
+	if(listen(sock, 10) < 0)
+	{
+		cout << "Can't listen..." << endl;
+		return -2;
+	}
 
 	// accept client
-	size = sizeof(struct sockaddr_in);
+	struct sockaddr_in client_addr;
+	socklen_t size = sizeof(struct sockaddr_in);
 	connected = accept(sock, (struct sockaddr*)&client_addr, &size);
 
 	if(connected < 0)
