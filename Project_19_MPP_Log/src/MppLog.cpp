@@ -209,9 +209,9 @@ std::string MppLog::getOMID(const MppBase* const p_logptr)
 double MppLog::getMicroSecond(const MppBase* const p_logptr)
 {
     std::stringstream oss;
-    oss << std::format("{0}.{1:02}{2:02}{3:02}", 
-        p_logptr->m_recv_micro[0], p_logptr->m_recv_micro[1], p_logptr->m_recv_micro[2], p_logptr->m_recv_micro[3]);
-    return std::stod(oss.str())*1e6;    
+    uint32_t microsecond = (p_logptr->m_recv_micro[1] << 24 | p_logptr->m_recv_micro[1] << 16) | (p_logptr->m_recv_micro[2] << 8) | p_logptr->m_recv_micro[3];
+    oss << std::format("{:06}", microsecond);
+    return std::stod(oss.str());    
 }
 
 std::string MppLog::getReserve(const MppBase* const p_logptr)
@@ -243,7 +243,6 @@ std::string MppLog::getRawContent(const MppBase* const p_logptr)
     
     while(rows < rowTotal)
     {
-        //itemsPerRow = (bytes_read > itemsPerRow ? itemsPerRow: bytes_read);
         for(size_t i=0; i<itemsPerRow; i++)
         {
             if(i < bytes_read)

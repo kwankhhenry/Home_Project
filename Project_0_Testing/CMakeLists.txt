@@ -6,3 +6,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 
 add_executable(main src/main.cpp)
+target_link_libraries(${PROJECT_NAME} pthread)
