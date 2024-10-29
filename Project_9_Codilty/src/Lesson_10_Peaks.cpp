@@ -12,6 +12,7 @@ using namespace std;
 
 int solution_naive(vector<int> &A)
 {
+    return 0;
 }
 
 int solution_efficient(vector<int> &A)

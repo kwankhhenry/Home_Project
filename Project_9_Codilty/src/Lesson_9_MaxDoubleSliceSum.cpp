@@ -71,7 +71,7 @@ int solution_naive(vector<int> &A)
 
 int solution_efficient(vector<int> &A)
 {
- 
+    return 0;
 }
 
 int main()
