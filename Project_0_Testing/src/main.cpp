@@ -8,6 +8,7 @@ class lifetime
 {
 public:
     lifetime(){cout << "Ctor called\n";};
+    lifetime(int x): member_data(x){cout << "Ctor called\n";};
 
     lifetime(const lifetime&){cout << "Copy tor called\n";};
     lifetime(lifetime&&){cout << "Move Ctor called\n";};
@@ -42,7 +43,9 @@ int main()
     l2.member_data = 42;*/
 
     //std::array<lifetime,2> a{lifetime(42), lifetime(42)};
-    std::array<lifetime,2> a{make_lifetime(42), make_lifetime(42)};
+    //std::array<lifetime,2> a{make_lifetime(42), make_lifetime(42)};
+
+    //std::vector<lifetime> a{lifetime(42), lifetime(42)};
     //std::vector<lifetime> a{std::move(l1),std::move(l2)};
     //std::vector<lifetime> a{make_lifetime(42),make_lifetime(42)};
 
