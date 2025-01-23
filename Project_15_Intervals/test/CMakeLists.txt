@@ -24,7 +24,7 @@ file(GLOB all_SRCS
 add_executable(${PROJECT_NAME}
                 ${all_SRCS})
 
-target_include_directories(test PRIVATE ${PROJECT_INTERVAL_SOURCE_DIR}/src/ /home/admin/External_lib/googletest_lib/include)
-target_link_directories(test PRIVATE /home/admin/External_lib/googletest_lib/lib)
+target_include_directories(test PRIVATE ${PROJECT_INTERVAL_SOURCE_DIR}/src/ /home/admin/External_lib/googletest/googletest/include)
+target_link_directories(test PRIVATE /home/admin/External_lib/googletest/build/lib)
 target_link_libraries(test PRIVATE gtest gtest_main pthread)
 #install(TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_SOURCE_DIR}/build/)
