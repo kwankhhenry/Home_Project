@@ -16,5 +16,3 @@ public:
     void process(std::atomic<int>& cntr);
     ~ThreadID();
 };
-
-int init(const int& loop);

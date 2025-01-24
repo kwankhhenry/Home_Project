@@ -4,6 +4,9 @@ project(testing VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
+# Useful alias
+set(EXTERNAL_LIB_DIR /home/admin/External_lib)
+
 # Note: redfine 
 #       -DCMAKE_INSTALL_PREFIX=/home/admin/External_lib 
 #       -DCMAKE_INSTALL_LIBDIR=/home/admin/External_lib/lib
@@ -12,10 +15,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 # Find googletest package (Config Mode)
 list(APPEND CMAKE_PREFIX_PATH ${EXTERNAL_LIB_DIR}/lib/cmake)
 find_package(GTest CONFIG REQUIRED)
+find_package(IcecreamCpp CONFIG REQUIRED)
 
 # Include here not to confused with actual project include directories
-include_directories(/home/admin/External_lib/googletest/googletest/include)
-link_directories(/home/admin/External_lib/googletest/build/lib)
+include_directories(${EXTERNAL_LIB_DIR}/googletest/googletest/include)
+link_directories(${EXTERNAL_LIB_DIR}/googletest/build/lib)
 
 # Actual Project files and executables
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/test.cpp)
