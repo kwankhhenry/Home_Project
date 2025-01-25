@@ -4,6 +4,8 @@
 #include "normal_interface.h"
 #include "crtp_interface.h"
 
+#include "icecream.hpp"
+
 template <typename T, typename S>
 void Benchmark(T& object, S function, const std::string& name)
 {
@@ -18,15 +20,18 @@ void Benchmark(T& object, S function, const std::string& name)
 
     // Calculate time and output result
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    std::cout << std::format("{} {}\n", name, duration.count());
+
+    IC(name, duration);
+    //std::cout << std::format("{} {}\n", name, duration.count());
 }
 
 int main()
 {
-    NormalImplemented object;
-    Benchmark(object, RunNormal, "Normal Interface");
+    NormalImplemented object_1;
+    Benchmark(object_1, RunNormal, "Normal Interface");
 
     CRTPImplemented object_2;
     Benchmark(object_2, RunCRTP<CRTPImplemented>, "CRTP Interface");
+
     return 0;
 }

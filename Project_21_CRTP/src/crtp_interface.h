@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stdint.h>
 
+#include "icecream.hpp"
+
 template <typename Derived>
 class CRTPInterface
 {
@@ -16,18 +18,21 @@ public:
     {
         return static_cast<Derived*>(this)->GetValue();
     }
+private:
+    CRTPInterface() = default;
+    friend Derived;
 };
 
 class CRTPImplemented : public CRTPInterface<CRTPImplemented>
 {
 public:
     CRTPImplemented() : counter(0) {}
-    void Count(uint64_t n)
+    inline void Count(uint64_t n)
     {
         counter += n;
     }
 
-    uint64_t GetValue()
+    inline uint64_t GetValue() const
     {
         return counter;
     }
@@ -46,5 +51,6 @@ void RunCRTP(CRTPInterface<T>* obj)
             obj->Count(j);
         }
     }
-    std::cout << "CRTP value: " << obj->GetValue() << std::endl;
+    IC(obj->GetValue());
+    //std::cout << "CRTP value: " << obj->GetValue() << std::endl;
 }

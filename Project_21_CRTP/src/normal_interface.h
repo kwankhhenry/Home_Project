@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stdint.h>
 
+#include "icecream.hpp"
+
 class NormalInterface
 {
 public:
@@ -37,5 +39,6 @@ void RunNormal(NormalInterface* obj)
             obj->Count(j);
         }
     }
-    std::cout << "Normal value: " << obj->GetValue() << std::endl;
+    IC(obj->GetValue());
+    //std::cout << "Normal value: " << obj->GetValue() << std::endl;
 }

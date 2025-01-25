@@ -9,8 +9,12 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O5")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")  # valgrind configurations
+#set(CMAKE_CXX_FLAGS_DEBUG "-O0 -pg -no-pie -fno-builtin")  # gprof configurations
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
+set(EXTERNAL_LIB /home/admin/External_lib)
 
 add_executable(main src/main.cpp)
+target_include_directories(${PROJECT_NAME} PRIVATE ${EXTERNAL_LIB}/include)
 target_link_libraries(${PROJECT_NAME} pthread)
