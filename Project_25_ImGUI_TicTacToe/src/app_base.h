@@ -1,7 +1,10 @@
+#pragma once
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
+#include <iostream>
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -15,19 +18,15 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-// This example can also compile and run with Emscripten! See 'Makefile.emscripten' for details.
-#ifdef __EMSCRIPTEN__
-#include "../libs/emscripten/emscripten_mainloop_stub.h"
-#endif
-
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
-class App{
+template<typename Derived>
+class AppBase{
 public:
-    App(){
+    AppBase(){
         // Setup window
         glfwSetErrorCallback(glfw_error_callback);
         if (!glfwInit())
@@ -69,6 +68,10 @@ public:
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // Enable vsync
 
+        // Add mouse callbacks
+        glfwSetMouseButtonCallback(window, &Derived::MouseButtonCallback);
+        glfwSetCursorPosCallback(window, &Derived::CursorPosCallback);
+
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -105,7 +108,7 @@ public:
         //IM_ASSERT(font != nullptr);
     }
 
-    virtual ~App(){
+    ~AppBase(){
         // Cleanup
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
@@ -120,14 +123,7 @@ public:
         StartUp();
 
         // Main loop
-    #ifdef __EMSCRIPTEN__
-        // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
-        // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
-        io.IniFilename = nullptr;
-        EMSCRIPTEN_MAINLOOP_BEGIN
-    #else
         while (!glfwWindowShouldClose(window))
-    #endif
         {
             // Poll and handle events (inputs, window resize, etc.)
             // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -160,12 +156,15 @@ public:
             glfwSwapBuffers(window);
         }
     }
-#ifdef __EMSCRIPTEN__
-    EMSCRIPTEN_MAINLOOP_END;W
-#endif
 
-    virtual void Update() = 0;
-    virtual void StartUp() = 0;
+    void Update(){
+        static_cast<Derived*>(this)->Update();
+    }
+
+    void StartUp(){
+        static_cast<Derived*>(this)->StartUp();
+    }
+
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 private:

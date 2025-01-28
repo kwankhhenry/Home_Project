@@ -1,17 +1,17 @@
 #include <cstdlib>
-#include "app.h"
+#include "app_base.h"
 
-class myApp : public App
+class myApp : public AppBase<myApp>
 {
 public:
     myApp() = default;
     ~myApp() = default;
 
-    virtual void StartUp() override
+    void StartUp()
     {
     }
 
-    virtual void Update() override
+    void Update()
     {
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
