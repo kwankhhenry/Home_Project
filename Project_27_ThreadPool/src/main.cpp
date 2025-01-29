@@ -1,9 +1,8 @@
 #include <cstdlib>
-#include "TicTacToe.h"
+#include "ThreadPool.h"
 
 int main(int, char**)
 {
-    TicTacToe app;
-    app.Run();
+    ThreadPool myPool; 
     return 0;
 }
