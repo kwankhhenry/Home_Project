@@ -54,8 +54,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
 set(LIB_NAME ThreadPool)
 set(INTERNAL_LIB_DIR /home/admin/Home_Project/Internal_lib)
 
-# Single option for library type: SHARED, STATIC, or INTERFACE
-set(LIB_TYPE "SHARED" CACHE STRING "Choose library type: SHARED, STATIC, INTERFACE")
+# Single option for library type: SHARED (Default), STATIC, or INTERFACE
+set(LIB_TYPE "SHARED" CACHE STRING "Choose library type: SHARED (Default), STATIC, INTERFACE")
 set_property(CACHE LIB_TYPE PROPERTY STRINGS "SHARED" "STATIC" "INTERFACE")
 
 # Create the library based on LIB_TYPE
@@ -86,7 +86,7 @@ include(GNUInstallDirs)  # Standard install directories
 # If not defined then default install location is /usr/local
 set(CMAKE_INSTALL_PREFIX "${INTERNAL_LIB_DIR}")
 
-# Set path configs to be EXPORT as target .cmake file and used by package manager to determine paths
+# Set path configs to be EXPORT as Target .cmake file and used by package manager to determine paths
 install(TARGETS ${LIB_NAME} EXPORT ${LIB_NAME}Targets  # Export ${LIB_NAME}Targets to be used to generate CMake config
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
@@ -100,10 +100,10 @@ install(DIRECTORY src/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PA
 # Export the package configuration for find_package()
 # Generate CMake target files with above EXPORT details
 install(EXPORT ${LIB_NAME}Targets 
-        #FILE ${LIB_NAME}Targets.cmake           # Specify the file name otherwise it will be ${LIB_NAME}Targets.cmake
-        DESTINATION lib/cmake/${LIB_NAME}
-        NAMESPACE MyLib::
-        CONFIGURATIONS Release Debug             # Tells CMake not to generate -noconfig.cmake files, but expects Release & Debug
+    #FILE ${LIB_NAME}Targets.cmake            # Specify the file name otherwise it will be ${LIB_NAME}Targets.cmake
+    DESTINATION lib/cmake/${LIB_NAME}
+    NAMESPACE MyLib::
+    CONFIGURATIONS Release Debug             # Tells CMake not to generate -noconfig.cmake files, but expects Release & Debug
 )
 
 # Use configure_package_config_file() to enable relocatable installs
@@ -114,14 +114,25 @@ install(EXPORT ${LIB_NAME}Targets
 # https://www.f-ax.de/dev/2020/10/07/cmake-config-package.html
 include(CMakePackageConfigHelpers)
 
+# 📌 Step 1: Auto-generate ${LIB_NAME}Config.cmake.in
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}Config.cmake.in "
+@PACKAGE_INIT@
+
+include(\"\${CMAKE_CURRENT_LIST_DIR}/${LIB_NAME}Targets.cmake\")
+
+check_required_components(${LIB_NAME})
+")
+
+# 📌 Step 2: Use configure_package_config_file() for relocatable installation
 configure_package_config_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in          # Config file template
-        ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}Config.cmake  # CMake config files that points to the Target files (File generated above)
-        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIB_NAME}
+    ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}Config.cmake.in      # Config file template
+    ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}Config.cmake         # CMake config files that points to the Target files (File generated above)
+   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIB_NAME}
 )
 
+# 📌 Step 3: Install rules for relocatable package
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}Config.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIB_NAME}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIB_NAME}
 )
 
 # Enable test modules

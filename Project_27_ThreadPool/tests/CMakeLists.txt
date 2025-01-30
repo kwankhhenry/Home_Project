@@ -28,12 +28,14 @@ include_directories(${EXTERNAL_LIB_DIR}/googletest/googletest/include)
 link_directories(${EXTERNAL_LIB_DIR}/googletest/build/lib)
 
 # Actual Project files and executables
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/test.cpp)
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/test.cpp
+                ${PROJECT_SOURCE_DIR}/../src/ThreadWorker.cpp
+                ${PROJECT_SOURCE_DIR}/../src/ThreadPool.cpp)
 
 # Include + Linking directories
 target_include_directories(${PROJECT_NAME} PRIVATE 
-    ${PROJECT_SOURCE_DIR}/../)
-target_link_directories(${PROJECT_NAME} PRIVATE )
+        ${PROJECT_SOURCE_DIR}/../)
+target_link_directories(${PROJECT_NAME} PRIVATE)
 target_link_libraries(${PROJECT_NAME} PRIVATE gtest gtest_main pthread)
 
 # Tutorial: https://www.youtube.com/watch?v=mdkVnmj32ZQ
