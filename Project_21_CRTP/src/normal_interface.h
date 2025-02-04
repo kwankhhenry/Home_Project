@@ -31,14 +31,15 @@ private:
 
 void RunNormal(NormalInterface* obj)
 {
-    const unsigned N = 40000;
-    for(unsigned i = 0; i < N; ++i)
+    const unsigned N = 1300;
+    for(uint64_t i = 0; i < N; ++i)
     {
-        for(unsigned j = 0; j < i; ++j)
+        for(uint64_t j = 0; j < i; ++j)
         {
             obj->Count(j);
         }
     }
+
     IC(obj->GetValue());
     //std::cout << "Normal value: " << obj->GetValue() << std::endl;
 }

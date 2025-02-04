@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 # Compiler flags
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-#set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")  # valgrind configurations
+#set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -fsanitize=address")  # valgrind configurations + AddressSanitizer
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0 -pg -no-pie -fno-builtin")  # gprof configurations
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 

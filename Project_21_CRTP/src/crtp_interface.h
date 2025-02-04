@@ -9,30 +9,30 @@ template <typename Derived>
 class CRTPInterface
 {
 public:
-    void Count(uint64_t n)
+    constexpr void Count(uint64_t n)
     {
         static_cast<Derived*>(this)->Count(n);
     }
 
-    uint64_t GetValue()
+    constexpr uint64_t GetValue()
     {
         return static_cast<Derived*>(this)->GetValue();
     }
 private:
-    CRTPInterface() = default;
+    constexpr CRTPInterface() = default;
     friend Derived;
 };
 
 class CRTPImplemented : public CRTPInterface<CRTPImplemented>
 {
 public:
-    CRTPImplemented() : counter(0) {}
-    inline void Count(uint64_t n)
+    constexpr CRTPImplemented() : counter(0) {}
+    constexpr inline void Count(uint64_t n)
     {
         counter += n;
     }
 
-    inline uint64_t GetValue() const
+    constexpr inline uint64_t GetValue()
     {
         return counter;
     }
@@ -40,17 +40,25 @@ private:
     uint64_t counter;
 };
 
-template <typename T>
-void RunCRTP(CRTPInterface<T>* obj)
-{
-    const unsigned N = 40000;
-    for(unsigned i = 0; i < N; ++i)
+template <typename T, uint64_t N>
+constexpr uint64_t loop(){
+    T obj;
+    CRTPInterface<T>* objptr = &obj;
+    for(uint64_t i = 0; i < N; ++i)
     {
-        for(unsigned j = 0; j < i; ++j)
+        for(uint64_t j = 0; j < i; ++j)
         {
-            obj->Count(j);
+            objptr->Count(j);
         }
     }
-    IC(obj->GetValue());
+    return objptr->GetValue();
+}
+
+template <typename T, uint64_t N>
+constexpr void RunCRTP()
+{
+    constexpr uint64_t result = loop<T,N>();
+    IC(result);
     //std::cout << "CRTP value: " << obj->GetValue() << std::endl;
 }
+

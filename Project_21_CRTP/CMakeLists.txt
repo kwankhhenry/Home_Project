@@ -9,7 +9,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")  # valgrind configurations
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -fconstexpr-loop-limit=50000000")  # valgrind configurations
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0 -pg -no-pie -fno-builtin")  # gprof configurations
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 

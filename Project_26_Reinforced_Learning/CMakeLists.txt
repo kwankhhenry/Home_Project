@@ -23,6 +23,9 @@ set(EXTERNAL_LIB_DIR /home/admin/External_lib)
 list(APPEND CMAKE_PREFIX_PATH ${EXTERNAL_LIB_DIR}/lib/cmake)
 find_package(IcecreamCpp CONFIG REQUIRED)
 
+list(APPEND CMAKE_PREFIX_PATH /home/admin/Home_Project/Internal_lib/lib/cmake)
+find_package(ThreadPool CONFIG REQUIRED)
+
 # Include here not to confused with actual project include directories
 include_directories(${IcecreamCpp_INCLUDE_DIRS})
 
